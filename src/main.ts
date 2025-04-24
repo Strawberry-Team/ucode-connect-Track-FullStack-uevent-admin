@@ -5,5 +5,7 @@ import { AppModule } from './app.module.js';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   await app.listen(process.env.PORT ?? 3000);
+
+  console.log(`\n✔ AdminJS is available on: http://localhost:${process.env.PORT}/admin`);
 }
 bootstrap();

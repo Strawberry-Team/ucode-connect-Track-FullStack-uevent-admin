@@ -5,7 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import provider from './admin/auth-provider.js';
-import options from './admin/options.js';
+import { getAdminOptions } from './admin/options.js';
 
 @Module({
   imports: [
@@ -14,6 +14,7 @@ import options from './admin/options.js';
     }),
     AdminModule.createAdminAsync({
       useFactory: async () => {
+        const options = await getAdminOptions();
         return {
           adminJsOptions: options,
           auth: {
