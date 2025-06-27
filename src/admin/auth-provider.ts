@@ -19,8 +19,12 @@ const provider = new DefaultAuthProvider({
         database: process.env.DATABASE_NAME,
         port: parseInt(process.env.DATABASE_PORT, 10),
         ssl: {
-          rejectUnauthorized: process.env.NODE_ENV === 'production',
-          ca: process.env.NODE_ENV === 'production' ? readFileSync(process.env.DATABASE_CA) : undefined,
+          rejectUnauthorized: (process.env.DATABASE_CA || process.env.NODE_ENV === 'production') 
+          ? false       // for TiDB Cloud
+          : undefined, 
+        ca: (process.env.DATABASE_CA || process.env.NODE_ENV === 'production') 
+          ? readFileSync(process.env.DATABASE_CA, 'utf8') 
+          : undefined,
         },
       });
 

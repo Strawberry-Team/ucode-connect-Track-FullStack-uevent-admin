@@ -2,12 +2,12 @@ import { AdminJSOptions } from 'adminjs';
 import componentLoader from './component-loader.js';
 import { Adapter, Database, Resource } from '@adminjs/sql';
 import 'dotenv/config';
+import { readFileSync } from 'fs';
 
 /**
  * Returns AdminJSOptions after initializing SQL adapter for MySQL
  */
 export const getAdminOptions = async (): Promise<AdminJSOptions> => {
-  // @ts-ignore
   const AdminJS = (await import('adminjs')).default;
   AdminJS.registerAdapter({ Database, Resource });
 
@@ -16,21 +16,27 @@ export const getAdminOptions = async (): Promise<AdminJSOptions> => {
       database: process.env.DATABASE_NAME,
       user: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD,
-      host: process.env.DATABASE_HOST || 'localhost',
-      port: parseInt(process.env.DATABASE_PORT || '3306', 10),
-      ssl: process.env.NODE_ENV === 'production' ? {
-        rejectUnauthorized: false, // для TiDB Cloud
-      } : undefined,
+      host: process.env.DATABASE_HOST,
+      port: parseInt(process.env.DATABASE_PORT, 10),
+      ssl: {
+        rejectUnauthorized: (process.env.DATABASE_CA || process.env.NODE_ENV === 'production') 
+          ? false       // for TiDB Cloud
+          : undefined, 
+        ca: (process.env.DATABASE_CA || process.env.NODE_ENV === 'production') 
+          ? readFileSync(process.env.DATABASE_CA, 'utf8') 
+          : undefined,
+      },
       connectTimeout: 60000,
     }).init();
 
     return {
       componentLoader,
-      rootPath: process.env.NODE_ENV === 'production' ? '/' : '/admin',
+      rootPath: '/admin',
       branding: {
         companyName: `[Admin] ${process.env.APP_NAME}`,
         favicon: '/favicon.ico',
-        logo: '/public/logo.png',
+        logo: '/public/logo_flat.png',
+        withMadeWithLove: false,
       },
       resources: [
         {
@@ -155,11 +161,12 @@ export const getAdminOptions = async (): Promise<AdminJSOptions> => {
     // Return minimal config without database
     return {
       componentLoader,
-      rootPath: process.env.NODE_ENV === 'production' ? '/' : '/admin',
+      rootPath: '/admin',
       branding: {
         companyName: `[Admin] ${process.env.APP_NAME || 'Univent'}`,
         favicon: '/favicon.ico',
-        logo: '/public/logo.png',
+        logo: '/public/logo_flat.png',
+        withMadeWithLove: false,
       },
       resources: [],
       databases: [],

@@ -27,7 +27,7 @@ async function bootstrap() {
     allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'X-Requested-With'],
   });
 
-  const port = process.env.ADMIN_PANEL_PORT || 3000;
+  const port = parseInt(process.env.ADMIN_PANEL_PORT, 10);
   await app.listen(port, '0.0.0.0'); // Bind to all interfaces for deployment
 
   const adminUrl = process.env.ADMIN_PANEL_URL || `http://localhost:${port}${process.env.NODE_ENV === 'production' ? '' : '/admin'}`;
