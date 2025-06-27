@@ -10,7 +10,8 @@ import { getAdminOptions } from './admin/options.js';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: '.env',
+      envFilePath: process.env.NODE_ENV === 'production' ? '.env' : '.env.development',
+      isGlobal: true,
     }),
     AdminModule.createAdminAsync({
       useFactory: async () => {
@@ -23,9 +24,14 @@ import { getAdminOptions } from './admin/options.js';
             cookieName: 'adminjs',
           },
           sessionOptions: {
-            resave: true,
-            saveUninitialized: true,
+            resave: false,
+            saveUninitialized: false,
             secret: process.env.COOKIE_SECRET,
+            cookie: {
+              secure: process.env.NODE_ENV === 'production',
+              httpOnly: true,
+              maxAge: 24 * 60 * 60 * 1000, // 24 hours
+            },
           },
         };
       },

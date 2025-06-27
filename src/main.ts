@@ -20,6 +20,7 @@ async function bootstrap() {
   const port = process.env.PORT || 8000;
   await app.listen(port, '0.0.0.0'); // Bind to all interfaces for deployment
 
-  console.log(`\n✔ AdminJS is available on: ${process.env.ADMIN_URL}`);
+  const adminUrl = process.env.ADMIN_URL || `http://localhost:${port}/admin`;
+  console.log(`\n✔ AdminJS is available on: ${adminUrl}`);
 }
 bootstrap();
