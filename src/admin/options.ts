@@ -33,7 +33,7 @@ export const getAdminOptions = async (): Promise<AdminJSOptions> => {
       branding: {
         companyName: `[Admin] ${process.env.APP_NAME}`,
         favicon: '/favicon.ico',
-        logo: '/public/logo_flat.png',
+        logo: '/logo_flat.png',
         withMadeWithLove: false,
       },
       resources: [
@@ -158,7 +158,7 @@ export const getAdminOptions = async (): Promise<AdminJSOptions> => {
       branding: {
         companyName: `[Admin] ${process.env.APP_NAME || 'Univent'}`,
         favicon: '/favicon.ico',
-        logo: '/public/logo_flat.png',
+        logo: '/logo_flat.png',
         withMadeWithLove: false,
       },
       resources: [],
