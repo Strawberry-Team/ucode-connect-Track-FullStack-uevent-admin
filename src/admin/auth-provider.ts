@@ -1,6 +1,7 @@
 import { DefaultAuthProvider } from 'adminjs';
 import { HashingService } from '../hashing.service.js';
 import mysql from 'mysql2/promise';
+import { readFileSync } from 'fs';
 
 import componentLoader from './component-loader.js';
 
@@ -12,14 +13,14 @@ const provider = new DefaultAuthProvider({
     let connection;
     try {
       connection = await mysql.createConnection({
-        host: process.env.DATABASE_HOST || 'localhost',
+        host: process.env.DATABASE_HOST,
         user: process.env.DATABASE_USER,
         password: process.env.DATABASE_PASSWORD,
         database: process.env.DATABASE_NAME,
-        port: parseInt(process.env.DATABASE_PORT || '3306', 10),
+        port: parseInt(process.env.DATABASE_PORT, 10),
         ssl: {
           rejectUnauthorized: process.env.NODE_ENV === 'production',
-          ca: process.env.NODE_ENV === 'production' ? process.env.DATABASE_CA : undefined,
+          ca: process.env.NODE_ENV === 'production' ? readFileSync(process.env.DATABASE_CA) : undefined,
         },
       });
 
