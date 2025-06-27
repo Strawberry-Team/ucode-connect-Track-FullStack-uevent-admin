@@ -1,11 +1,17 @@
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
+import cookieParser from 'cookie-parser';
 
 import { AppModule } from './app.module.js';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  
+  if (process.env.NODE_ENV === 'production') {
+    // Connect cookie-parser with secret for signed cookies
+    app.use(cookieParser(process.env.COOKIE_SECRET));
+  }
   
   // Serve static files from public directory
   app.useStaticAssets(join(process.cwd(), 'public'), {
