@@ -29,7 +29,8 @@ export const getAdminOptions = async (): Promise<AdminJSOptions> => {
       rootPath: process.env.NODE_ENV === 'production' ? '/' : '/admin',
       branding: {
         companyName: `[Admin] ${process.env.APP_NAME}`,
-        favicon: `${process.env.FRONTEND_URL}/favicon.ico`,  
+        favicon: '/favicon.ico',
+        logo: '/public/logo.png',
       },
       resources: [
         {
@@ -157,7 +158,8 @@ export const getAdminOptions = async (): Promise<AdminJSOptions> => {
       rootPath: process.env.NODE_ENV === 'production' ? '/' : '/admin',
       branding: {
         companyName: `[Admin] ${process.env.APP_NAME || 'Univent'}`,
-        favicon: `${process.env.FRONTEND_URL || 'http://localhost:3000'}/favicon.ico`,  
+        favicon: '/favicon.ico',
+        logo: '/public/logo.png',
       },
       resources: [],
       databases: [],
