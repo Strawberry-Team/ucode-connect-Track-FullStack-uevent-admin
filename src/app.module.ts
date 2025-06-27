@@ -29,9 +29,9 @@ import { getAdminOptions } from './admin/options.js';
             secret: process.env.COOKIE_SECRET,
             cookie: {
               secure: process.env.NODE_ENV === 'production',
-              httpOnly: process.env.NODE_ENV === 'development',
-              sameSite: 'strict',
-              domain: process.env.ADMIN_PANEL_DOMAIN,
+              httpOnly: true,
+              sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
+              domain: process.env.NODE_ENV === 'production' ? undefined : process.env.ADMIN_PANEL_DOMAIN,
               path: '/',              
               maxAge: 24 * 60 * 60 * 1000, // 24 hours
             },
