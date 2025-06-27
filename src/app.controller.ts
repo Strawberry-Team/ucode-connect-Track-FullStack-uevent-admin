@@ -9,14 +9,14 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  redirectToAdmin(@Res() res: Response): void {
+    res.redirect('/admin/');
   }
 
   @Get('favicon.ico')
   getFavicon(@Res() res: Response) {
     const faviconPath = process.env.NODE_ENV === 'production' 
-      ? '/app/favicon.ico'
+      ? '/public/favicon.ico'
       : join(process.cwd(), 'public', 'favicon.ico');
     res.sendFile(faviconPath);
   }
