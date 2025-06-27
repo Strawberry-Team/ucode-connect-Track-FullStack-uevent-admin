@@ -17,12 +17,8 @@ async function bootstrap() {
     allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'X-Requested-With'],
   });
 
-  const port = process.env.PORT || 8000;
-  await app.listen(port, '0.0.0.0'); // Bind to all interfaces for deployment
+  await app.listen(process.env.PORT, '0.0.0.0'); // Bind to all interfaces for deployment
 
-  const adminUrl = process.env.NODE_ENV === 'production' 
-    ? process.env.ADMIN_PANEL_URL
-    : `${process.env.ADMIN_PANEL_URL}/admin`;
-  console.log(`\n✔ AdminJS is available on: ${adminUrl}`);
+  console.log(`\n✔ AdminJS is available on: ${process.env.ADMIN_PANEL_URL}`);
 }
 bootstrap();
