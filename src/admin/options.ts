@@ -23,8 +23,9 @@ export const getAdminOptions = async (): Promise<AdminJSOptions> => {
     componentLoader,
     rootPath: '/admin',
     branding: {
-      companyName: '[Admin] uevent',
-  },
+      companyName: `[Admin] ${process.env.APP_NAME}`,
+      favicon: `${process.env.FRONTEND_URL}/favicon.ico`,  
+    },
     resources: [
       {
         resource: db.table('users'),

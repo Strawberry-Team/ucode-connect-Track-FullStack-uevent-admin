@@ -17,7 +17,7 @@ npm start
 ## Test data
 Admin data for testing:
 ```text
-admin@uevent.com
+admin@univent.com
 ```
 All users have a password:
 ```text

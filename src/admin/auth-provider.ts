@@ -16,7 +16,11 @@ const provider = new DefaultAuthProvider({
         user: process.env.DATABASE_USER,
         password: process.env.DATABASE_PASSWORD,
         database: process.env.DATABASE_NAME,
-        port: parseInt(process.env.DATABASE_PORT || '3306', 10)
+        port: parseInt(process.env.DATABASE_PORT || '3306', 10),
+        ssl: {
+          rejectUnauthorized: process.env.NODE_ENV === 'production',
+          ca: process.env.NODE_ENV === 'production' ? process.env.DATABASE_CA : undefined,
+        },
       });
 
       const [rows] = await connection.execute(
