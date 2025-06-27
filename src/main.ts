@@ -10,7 +10,7 @@ async function bootstrap() {
     origin: [
       process.env.FRONTEND_URL,
       process.env.BACKEND_URL,
-      process.env.ADMIN_URL,
+      process.env.ADMIN_PANEL_URL,
     ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
@@ -20,7 +20,9 @@ async function bootstrap() {
   const port = process.env.PORT || 8000;
   await app.listen(port, '0.0.0.0'); // Bind to all interfaces for deployment
 
-  const adminUrl = process.env.ADMIN_URL || `http://localhost:${port}/admin`;
+  const adminUrl = process.env.NODE_ENV === 'production' 
+    ? process.env.ADMIN_PANEL_URL
+    : `${process.env.ADMIN_PANEL_URL}/admin`;
   console.log(`\n✔ AdminJS is available on: ${adminUrl}`);
 }
 bootstrap();
