@@ -18,7 +18,7 @@ export const getAdminOptions = async (): Promise<AdminJSOptions> => {
       password: process.env.DATABASE_PASSWORD,
       host: process.env.DATABASE_HOST,
       port: parseInt(process.env.DATABASE_PORT, 10),
-      ssl: process.env.NODE_ENV === 'production' ? {
+      ssl: process.env.DATABASE_HOST !== 'localhost' ? {
         rejectUnauthorized: false,
         ca: process.env.DATABASE_CA 
           ? readFileSync(process.env.DATABASE_CA, 'utf8') 

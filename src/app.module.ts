@@ -30,8 +30,8 @@ import { getAdminOptions } from './admin/options.js';
             cookie: {
               secure: process.env.NODE_ENV === 'production',
               httpOnly: true,
-              sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
-              domain: process.env.NODE_ENV === 'production' ? undefined : process.env.ADMIN_PANEL_DOMAIN,
+              sameSite: process.env.NODE_ENV === 'production' ? 'lax' : 'strict',
+              domain: undefined, // Let browser handle domain automatically
               path: '/',              
               maxAge: 24 * 60 * 60 * 1000, // 24 hours
             },

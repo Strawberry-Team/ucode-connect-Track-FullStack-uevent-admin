@@ -14,18 +14,24 @@ async function bootstrap() {
   
   // Enable CORS for production deployment
   app.enableCors({
-    origin: [
-      process.env.FRONTEND_URL,
-      process.env.BACKEND_URL,
-      process.env.ADMIN_PANEL_URL,
-      'https://univent-admin-panel.koyeb.app',
-      'http://localhost:3000',
-      'http://localhost:3001',
-      'http://localhost:8080'
-    ].filter(Boolean),
+    origin: process.env.NODE_ENV === 'production' 
+      ? [
+          process.env.FRONTEND_URL,
+          process.env.BACKEND_URL,
+          process.env.ADMIN_PANEL_URL,
+        ].filter(Boolean)
+      : [
+          'http://localhost:3000',
+          'http://localhost:3001',
+          'http://localhost:8080',
+          process.env.FRONTEND_URL,
+          process.env.BACKEND_URL,
+          process.env.ADMIN_PANEL_URL,
+        ].filter(Boolean),
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'X-Requested-With'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'X-Requested-With', 'Accept'],
+    optionsSuccessStatus: 200, // For legacy browser support
   });
 
   const port = parseInt(process.env.ADMIN_PANEL_PORT, 10);

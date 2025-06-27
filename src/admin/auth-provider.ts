@@ -19,10 +19,10 @@ const provider = new DefaultAuthProvider({
         password: process.env.DATABASE_PASSWORD,
         database: process.env.DATABASE_NAME,
         port: parseInt(process.env.DATABASE_PORT, 10),
-        ssl: process.env.NODE_ENV === 'production' ? {
+        ssl: process.env.DATABASE_HOST !== 'localhost' ? {
           rejectUnauthorized: false,
           ca: process.env.DATABASE_CA 
-            ? readFileSync(process.env.DATABASE_CA, 'utf8') 
+            ? readFileSync(process.env.DATABASE_CA, 'utf8')
             : undefined,
         } : undefined,
       });
@@ -60,7 +60,7 @@ const provider = new DefaultAuthProvider({
         host: process.env.DATABASE_HOST,
         database: process.env.DATABASE_NAME,
         port: process.env.DATABASE_PORT,
-        ssl: process.env.NODE_ENV === 'production'
+        ssl: process.env.DATABASE_HOST !== 'localhost'
       });
       return null;
     } finally {
