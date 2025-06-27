@@ -18,14 +18,12 @@ export const getAdminOptions = async (): Promise<AdminJSOptions> => {
       password: process.env.DATABASE_PASSWORD,
       host: process.env.DATABASE_HOST,
       port: parseInt(process.env.DATABASE_PORT, 10),
-      ssl: {
-        rejectUnauthorized: (process.env.DATABASE_CA || process.env.NODE_ENV === 'production') 
-          ? false       // for TiDB Cloud
-          : undefined, 
-        ca: (process.env.DATABASE_CA || process.env.NODE_ENV === 'production') 
+      ssl: process.env.NODE_ENV === 'production' ? {
+        rejectUnauthorized: false,
+        ca: process.env.DATABASE_CA 
           ? readFileSync(process.env.DATABASE_CA, 'utf8') 
           : undefined,
-      },
+      } : undefined,
       connectTimeout: 60000,
     }).init();
 
@@ -152,11 +150,6 @@ export const getAdminOptions = async (): Promise<AdminJSOptions> => {
     };
   } catch (error) {
     console.error('❌ Database connection failed:', error.message);
-    console.log('\n🔧 To fix this issue:');
-    console.log('1. Install MySQL/MariaDB locally');
-    console.log('2. Create database "univent_dev"');
-    console.log('3. Update .env.development with correct database credentials');
-    console.log('4. Or run without database for now\n');
     
     // Return minimal config without database
     return {

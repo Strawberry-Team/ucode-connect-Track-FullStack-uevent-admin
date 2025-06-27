@@ -18,14 +18,12 @@ const provider = new DefaultAuthProvider({
         password: process.env.DATABASE_PASSWORD,
         database: process.env.DATABASE_NAME,
         port: parseInt(process.env.DATABASE_PORT, 10),
-        ssl: {
-          rejectUnauthorized: (process.env.DATABASE_CA || process.env.NODE_ENV === 'production') 
-          ? false       // for TiDB Cloud
-          : undefined, 
-        ca: (process.env.DATABASE_CA || process.env.NODE_ENV === 'production') 
-          ? readFileSync(process.env.DATABASE_CA, 'utf8') 
-          : undefined,
-        },
+        ssl: process.env.NODE_ENV === 'production' ? {
+          rejectUnauthorized: false,
+          ca: process.env.DATABASE_CA 
+            ? readFileSync(process.env.DATABASE_CA, 'utf8') 
+            : undefined,
+        } : undefined,
       });
 
       const [rows] = await connection.execute(
