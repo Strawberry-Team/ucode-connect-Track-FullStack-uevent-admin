@@ -28,7 +28,7 @@ import { getExpressSessionConfig } from './config/session.config.js';
             ...getExpressSessionConfig(),
             cookie: {
               ...getExpressSessionConfig().cookie,
-              domain: process.env.NODE_ENV === 'production' ? '.koyeb.app' : undefined,
+              domain: process.env.NODE_ENV === 'production' ? process.env.ADMIN_PANEL_DOMAIN : undefined,
             },
           },
         };
