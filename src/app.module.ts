@@ -6,7 +6,7 @@ import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import provider from './admin/auth-provider.js';
 import { getAdminOptions } from './admin/options.js';
-import { getAlternativeSessionConfig, getExpressSessionConfig } from './config/session.config.js';
+import { getExpressSessionConfig, getSimpleSessionConfig, getCookieSessionConfig } from './config/session.config.js';
 
 @Module({
   imports: [
@@ -24,13 +24,11 @@ import { getAlternativeSessionConfig, getExpressSessionConfig } from './config/s
             cookiePassword: process.env.COOKIE_SECRET || 'fallback-secret-for-development',
             cookieName: 'adminjs',
           },
-          sessionOptions: {
-            ...getAlternativeSessionConfig(),
-            cookie: {
-              ...getExpressSessionConfig().cookie,
-              domain: process.env.NODE_ENV === 'production' ? process.env.ADMIN_PANEL_DOMAIN : undefined,
-            },
-          },
+          sessionOptions: getSimpleSessionConfig(),
+          
+          // ALTERNATIVE APPROACH: Using cookie-session (uncomment if express-session doesn't work)
+          // Replace sessionOptions with:
+          // sessionOptions: getCookieSessionConfig(),
         };
       },
     }),
