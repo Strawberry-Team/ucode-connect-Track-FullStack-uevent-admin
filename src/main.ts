@@ -73,6 +73,6 @@ async function bootstrap() {
     || `http://localhost:${port}${process.env.NODE_ENV === 'production'
       ? '/'
       : '/admin'}`;
-  console.log(`\n☑️ AdminJS is available on: ${adminUrl}`);
+  console.log(`\n☑️ Admin Panel is available on: ${adminUrl}`);
 }
 bootstrap();

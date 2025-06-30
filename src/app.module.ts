@@ -31,10 +31,10 @@ import {
           // sessionOptions: getSimpleSessionConfig(),
           
           // 🛡️ RECOMMENDED: Gradually improved security
-          // sessionOptions: getImprovedSessionConfig(),
+          sessionOptions: getImprovedSessionConfig(),
           
           // 🔒 MAXIMUM SECURITY: Use when ready for full security
-          sessionOptions: getSecureSessionConfig(),
+          // sessionOptions: getSecureSessionConfig(),
         };
       },
     }),
