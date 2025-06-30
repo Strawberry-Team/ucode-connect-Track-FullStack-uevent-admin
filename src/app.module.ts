@@ -6,7 +6,7 @@ import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import provider from './admin/auth-provider.js';
 import { getAdminOptions } from './admin/options.js';
-import { getExpressSessionConfig } from './config/session.config.js';
+import { getAlternativeSessionConfig, getExpressSessionConfig } from './config/session.config.js';
 
 @Module({
   imports: [
@@ -25,7 +25,7 @@ import { getExpressSessionConfig } from './config/session.config.js';
             cookieName: 'adminjs',
           },
           sessionOptions: {
-            ...getExpressSessionConfig(),
+            ...getAlternativeSessionConfig(),
             cookie: {
               ...getExpressSessionConfig().cookie,
               domain: process.env.NODE_ENV === 'production' ? process.env.ADMIN_PANEL_DOMAIN : undefined,
