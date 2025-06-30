@@ -6,7 +6,7 @@ import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import provider from './admin/auth-provider.js';
 import { getAdminOptions } from './admin/options.js';
-import { getCookieSessionConfig } from './config/session.config.js';
+import { getExpressSessionConfig } from './config/session.config.js';
 
 @Module({
   imports: [
@@ -21,10 +21,16 @@ import { getCookieSessionConfig } from './config/session.config.js';
           adminJsOptions: options,
           auth: {
             provider,
-            cookiePassword: process.env.COOKIE_SECRET,
+            cookiePassword: process.env.COOKIE_SECRET || 'fallback-secret-for-development',
             cookieName: 'adminjs',
           },
-          sessionOptions: getCookieSessionConfig(),
+          sessionOptions: {
+            ...getExpressSessionConfig(),
+            cookie: {
+              ...getExpressSessionConfig().cookie,
+              domain: process.env.NODE_ENV === 'production' ? '.koyeb.app' : undefined,
+            },
+          },
         };
       },
     }),

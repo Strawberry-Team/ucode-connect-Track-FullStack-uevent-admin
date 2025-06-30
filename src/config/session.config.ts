@@ -1,34 +1,43 @@
 import { SessionOptions } from 'express-session';
 
-export const getCookieSessionConfig = (): SessionOptions => ({
-  resave: false, // Do not save session if it is not modified
-  saveUninitialized: false, // Do not save new sessions without data
+export const getExpressSessionConfig = (): SessionOptions => ({
+  resave: false,
+  saveUninitialized: false,
   secret: process.env.COOKIE_SECRET || 'fallback-secret-for-development',
   
-  // Do not use any store - all data is stored in the client's cookies
-  store: undefined,
+  // Use standard memory store - AdminJS itself manages cookies
+  // store: not specified, so the standard MemoryStore is used
   
   cookie: {
-    secure: process.env.NODE_ENV === 'production', // HTTPS only on production
-    httpOnly: true, // Cookies are not accessible through JavaScript (XSS protection)
-    sameSite: process.env.NODE_ENV === 'production' ? 'lax' : 'strict', // CSRF protection
-    domain: undefined, // Browser will determine the domain
-    path: '/', // Cookies are accessible for the entire site
-    maxAge: 24 * 60 * 60 * 1000, // 24 hours - session lifetime
-    signed: true, // Signed cookies for integrity check
+    // secure only for production and HTTPS
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    // sameSite 'lax' for both environments for better compatibility
+    sameSite: 'lax',
+    path: '/',
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    signed: false, // Disable signed cookies to avoid conflicts
   },
   
-  // Generator for unique session IDs
-  genid: () => {
-    return `${Date.now().toString(36)}-${Math.random().toString(36).substr(2, 9)}`;
-  },
-  
-  // Name of the session cookie (must be unique)
   name: 'adminjs.session',
+  rolling: true, // Continue session on activity
+});
+
+// Alternative configuration for cases where the main one doesn't work
+export const getAlternativeSessionConfig = (): SessionOptions => ({
+  resave: true,
+  saveUninitialized: true,
+  secret: process.env.COOKIE_SECRET || 'fallback-secret-for-development',
   
-  // Do not update the cookie expiration time on each request (saves traffic)
-  rolling: false,
+  cookie: {
+    secure: false, // Disable secure for testing
+    httpOnly: false, // Allow JS access for testing
+    sameSite: false, // Least restrictive settings
+    path: '/',
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    signed: false, // Signed cookies for security
+  },
   
-  // Custom function to control when the session is considered "modified"
-  // By default, express-session automatically manages this
+  name: 'adminjs.session',
+  rolling: true,
 }); 

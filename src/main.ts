@@ -8,10 +8,8 @@ import { AppModule } from './app.module.js';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   
-  if (process.env.NODE_ENV === 'production') {
-    // Connect cookie-parser with secret for signed cookies
-    app.use(cookieParser(process.env.COOKIE_SECRET));
-  }
+  // Connect cookie-parser with secret for signed cookies (required for cookie-session)
+  app.use(cookieParser(process.env.COOKIE_SECRET || 'fallback-secret-for-development'));
   
   // Serve static files from public directory
   app.useStaticAssets(join(process.cwd(), 'public'), {
@@ -22,6 +20,7 @@ async function bootstrap() {
   app.enableCors({
     origin: process.env.NODE_ENV === 'production' 
       ? [
+          'https://univent-admin-panel.koyeb.app',
           process.env.FRONTEND_URL,
           process.env.BACKEND_URL,
           process.env.ADMIN_PANEL_URL,
@@ -38,6 +37,7 @@ async function bootstrap() {
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'X-Requested-With', 'Accept'],
     optionsSuccessStatus: 200, // For legacy browser support
+    exposedHeaders: ['Set-Cookie'], // Allow browser to read Set-Cookie headers
   });
 
   const port = parseInt(process.env.ADMIN_PANEL_PORT, 10);
