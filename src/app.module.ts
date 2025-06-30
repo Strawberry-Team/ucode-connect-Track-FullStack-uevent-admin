@@ -28,10 +28,11 @@ import {
             cookiePassword: process.env.COOKIE_SECRET || 'fallback-secret-for-development',
             cookieName: 'adminjs',
           },
-          // sessionOptions: getSimpleSessionConfig(),
+          // 🔒 MINIMAL SECURITY: Minimal security (recommended)
+          sessionOptions: getSimpleSessionConfig(),
           
-          // 🛡️ RECOMMENDED: Gradually improved security
-          sessionOptions: getImprovedSessionConfig(),
+          // 🔒 RECOMMENDED: Gradually improved security
+          // sessionOptions: getImprovedSessionConfig(),
           
           // 🔒 MAXIMUM SECURITY: Use when ready for full security
           // sessionOptions: getSecureSessionConfig(),
