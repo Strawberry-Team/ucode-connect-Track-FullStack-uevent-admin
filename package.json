@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "nest build",
+    "build": "npx nest build",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "start:dev": "dotenv -v NODE_ENV=development -e .env.development -- nest start --watch",
     "start:dev:local": "dotenv -v NODE_ENV=development -e .env.development.local -- nest start --watch",
