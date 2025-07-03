@@ -1,6 +1,7 @@
 import { DefaultAuthProvider } from 'adminjs';
 import { HashingService } from '../hashing.service.js';
 import mysql from 'mysql2/promise';
+import { readFileSync } from 'fs';
 
 import componentLoader from './component-loader.js';
 
@@ -12,16 +13,20 @@ const provider = new DefaultAuthProvider({
     let connection;
     try {
       connection = await mysql.createConnection({
-        host: process.env.DATABASE_HOST || 'localhost',
+        host: process.env.DATABASE_HOST,
         user: process.env.DATABASE_USER,
         password: process.env.DATABASE_PASSWORD,
         database: process.env.DATABASE_NAME,
-        port: parseInt(process.env.DATABASE_PORT || '3306', 10),
-        ssl: {
-          rejectUnauthorized: process.env.NODE_ENV === 'production',
-          ca: process.env.NODE_ENV === 'production' ? process.env.DATABASE_CA : undefined,
-        },
+        port: parseInt(process.env.DATABASE_PORT, 10),
+        ssl: process.env.DATABASE_HOST !== 'localhost' ? {
+          rejectUnauthorized: false,
+          ca: process.env.DATABASE_CA 
+            ? readFileSync(process.env.DATABASE_CA, 'utf8')
+            : undefined,
+        } : undefined,
       });
+
+      console.log('✅ Database connection established');
 
       const [rows] = await connection.execute(
         'SELECT id, email, password, first_name, last_name FROM users WHERE email = ? AND is_email_verified IS TRUE AND role = "admin" LIMIT 1',
@@ -30,12 +35,14 @@ const provider = new DefaultAuthProvider({
 
       const user = rows[0];
       if (!user) {
+        console.error('❌ User not found or not verified admin:', email);
         return null;
       }
 
       const isPasswordValid = await hashingService.compare(password, user.password);
 
       if (!isPasswordValid) {
+        console.error('❌ Invalid password for user:', email);
         return null;
       }
 
@@ -44,7 +51,7 @@ const provider = new DefaultAuthProvider({
         title: `${user.first_name} ${user.last_name}`.trim(),
       };
     } catch (error) {
-      console.error('Authentication error:', error);
+      console.error('❌ Authentication error:', error);
       return null;
     } finally {
       if (connection) {
