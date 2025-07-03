@@ -25,9 +25,9 @@
    <h3>
       <p align="center">
          <sub><i>
-            ucode connect uevent "Univent" Admin Panel is the project of ucode connect the Track FullStack programming bootcamp<br />
-            lasting 5 weeks (March 31, 2025 - May 2, 2025),<br />
-            built with NestJS and AdminJS, it provides a secure web-based interface for managing users, companies, events and payment data.
+            ucode connect uevent "Univent" is the project of ucode connect the Track FullStack programming bootcamp<br />
+            lasting 5 weeks (March 31, 2025 - May 2, 2025),<br />where the NestJS with TypeScript and React with Next.js were used to develop the event ticketing service.<br /><br />
+            The purpose: create an event ticketing service to unite people with the same interests<br />using the whole cycle of Challenge Based Learning framework with a team.
          </i></sub>
       </p>
    </h3>
@@ -36,7 +36,7 @@
 
 
 # 📑 Table of Contents
-- [🗓️ Overview](#️-overview)
+- [🗓️ About "Univent" Platform](#-about-univent-platform)
 - [🧑‍💻 Team](#-team)
 - [🗓 About "Univent" Admin Panel](#-about-univent-admin-panel)
 - [🎯 Features and Functionality](#-features-and-functionality)
@@ -54,11 +54,19 @@
 
 
 
+# 🗓️ About "Univent" Platform
+<b>Univent</b> is a platform for creating, attending and managing events! 
 
-# 🗓️ Overview
-**Univent Admin Panel** is an administrative interface for the "Univent" event management platform.
+Organise events with interactive maps, buy tickets, use promo codes and receive notifications. 
 
-Built with NestJS and AdminJS, it provides secure access to manage users, companies, events, payments and other data through a web-based dashboard.
+A user-friendly profile for everyone - from organisers to guests.
+
+Here is a [link](https://docs.google.com/presentation/d/1sdtH8O495crk_I2gUyWO1z9XUWx4i6cH/edit?usp=sharing&ouid=109902939512595211399&rtpof=true&sd=true) to the presentation file.</p>
+
+![Description](https://github.com/user-attachments/assets/bbef933a-aff0-4612-a0fa-c3734263a027)
+![Desktop View](https://github.com/user-attachments/assets/8a7ca803-97f9-4dc4-a509-0609296614ac)
+![Tablet View](https://github.com/user-attachments/assets/cd5f8352-8896-4a96-8488-c747902ff0c7)
+![Mobile and Tablet View](https://github.com/user-attachments/assets/cbd9ebe4-e325-4fed-9b36-4b0ec51e1ff6)
 
 
 
@@ -88,6 +96,10 @@ Built with NestJS and AdminJS, it provides secure access to manage users, compan
 The Univent Admin Panel is a secure, web-based administrative interface built with NestJS and AdminJS to manage the Univent event platform. It provides administrators with tools to manage users, companies, events, payments, and other data.
 
 The admin panel connects directly to the MySQL database, offering CRUD operations through an intuitive AdminJS interface. Key features include admin-only authentication with email verification, secure session management using file-based storage, and comprehensive security headers for protection against common web vulnerabilities.
+
+
+
+
 
 # 🎯 Features and Functionality
 **Univent Admin Panel** provides the following administrative capabilities:
@@ -169,11 +181,11 @@ Before starting, ensure the required technologies are installed.
 
 
 # 🚀 How to Run the Solution
-1. Run the [univent-backend](https://github.com/Strawberry-Team/calendula-backend) project.
+1. Run the ["Univent" Backend](https://github.com/Strawberry-Team/ucode-connect-Track-FullStack-uevent-Univent-backend) project.
 2. Clone this repository and move to the project directory:
    ```bash
-   git clone <repository-url> uevent-admin
-   cd uevent-admin
+   git clone <repository-url> univent-admin
+   cd univent-admin
    ```
 3. Install all dependencies:
    ```bash
@@ -183,20 +195,20 @@ Before starting, ensure the required technologies are installed.
    - Locate the `.env.development.example` file in the root of the project.
    - Rename `.env.development.example` to `.env.development`. 
    - Open `.env.development` and add your data in the appropriate fields:
-        ```env
-        DATABASE_HOST=localhost
-        DATABASE_PORT=3306
-        DATABASE_USER=your_db_user
-        DATABASE_PASSWORD=your_db_password
-        DATABASE_NAME=univent
-        
-        # Admin credentials
-        ADMIN_EMAIL=admin@univent.com
-        ADMIN_PASSWORD=Password123!$
-        
-        # Security
-        COOKIE_SECRET=your_cookie_secret_key
-        ```
+      ```env
+      DATABASE_HOST=localhost
+      DATABASE_PORT=3306
+      DATABASE_USER=your_db_user
+      DATABASE_PASSWORD=your_db_password
+      DATABASE_NAME=univent
+      
+      # Admin credentials
+      ADMIN_EMAIL=admin@univent.com
+      ADMIN_PASSWORD=Password123!$
+      
+      # Security
+      COOKIE_SECRET=your_cookie_secret_key
+      ```
 5. Build the project:
    ```bash
    npm run build
