@@ -10,7 +10,6 @@ const hashingService = new HashingService();
 const provider = new DefaultAuthProvider({
   componentLoader,
   authenticate: async ({ email, password }) => {
-    console.log('🔐 Authentication attempt for:', email);
     let connection;
     try {
       connection = await mysql.createConnection({
@@ -36,32 +35,23 @@ const provider = new DefaultAuthProvider({
 
       const user = rows[0];
       if (!user) {
-        console.log('❌ User not found or not verified admin:', email);
+        console.error('❌ User not found or not verified admin:', email);
         return null;
       }
-
-      console.log('✅ User found:', { email: user.email, name: `${user.first_name} ${user.last_name}` });
 
       const isPasswordValid = await hashingService.compare(password, user.password);
 
       if (!isPasswordValid) {
-        console.log('❌ Invalid password for user:', email);
+        console.error('❌ Invalid password for user:', email);
         return null;
       }
 
-      console.log('✅ Authentication successful for:', email);
       return {
         email: user.email,
         title: `${user.first_name} ${user.last_name}`.trim(),
       };
     } catch (error) {
       console.error('❌ Authentication error:', error);
-      console.error('Database config:', {
-        host: process.env.DATABASE_HOST,
-        database: process.env.DATABASE_NAME,
-        port: process.env.DATABASE_PORT,
-        ssl: process.env.DATABASE_HOST !== 'localhost'
-      });
       return null;
     } finally {
       if (connection) {

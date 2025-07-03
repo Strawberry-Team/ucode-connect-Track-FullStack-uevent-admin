@@ -24,7 +24,6 @@ async function bootstrap() {
     if (!existsSync(sessionsPath)) {
       try {
         mkdirSync(sessionsPath, { recursive: true });
-        console.log('✅ Sessions directory created:', sessionsPath);
       } catch (error) {
         console.warn('⚠️ Could not create sessions directory:', error.message);
       }
@@ -34,21 +33,6 @@ async function bootstrap() {
   // Configure session middleware explicitly
   const sessionConfig = getImprovedSessionConfig();
   app.use(session(sessionConfig));
-  console.log('✅ Express session middleware configured');
-  
-  // Add session debugging middleware
-  app.use((req, res, next) => {
-    if (req.path.startsWith('/admin')) {
-      console.log('🔍 Admin request:', {
-        path: req.path,
-        method: req.method,
-        hasSession: !!req.session,
-        sessionId: req.sessionID,
-        adminUser: req.session?.adminUser || 'not set'
-      });
-    }
-    next();
-  });
 
   // 🛡️ Security Headers Middleware
   app.use((req, res, next) => {
@@ -83,14 +67,6 @@ async function bootstrap() {
       rootPath: '/admin',
     });
 
-    // Log session configuration for debugging
-    console.log('🔧 Session configuration:', {
-      hasStore: !!sessionConfig.store,
-      cookieSecure: sessionConfig.cookie?.secure,
-      cookiePath: sessionConfig.cookie?.path,
-      environment: process.env.NODE_ENV,
-    });
-
     // Build authentication router using @adminjs/express
     // Pass null as sessionOptions since we've already configured session middleware
     const adminRouter = buildAuthenticatedRouter(
@@ -106,7 +82,6 @@ async function bootstrap() {
 
     // Mount admin router
     app.use('/admin', adminRouter);
-    console.log('✅ AdminJS manually mounted on /admin');
   } catch (error) {
     console.error('❌ Failed to setup AdminJS:', error.message);
   }
