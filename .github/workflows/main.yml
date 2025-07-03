@@ -7,6 +7,9 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: Production
+      url: https://univent-admin-panel.onrender.com
     steps:
       - uses: actions/checkout@v3
       - name: Deploy
