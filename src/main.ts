@@ -3,6 +3,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import { mkdirSync, existsSync } from 'fs';
 import cookieParser from 'cookie-parser';
+import session from 'express-session';
 import AdminJS from 'adminjs';
 import { buildAuthenticatedRouter } from '@adminjs/express';
 
@@ -29,6 +30,25 @@ async function bootstrap() {
       }
     }
   }
+
+  // Configure session middleware explicitly
+  const sessionConfig = getImprovedSessionConfig();
+  app.use(session(sessionConfig));
+  console.log('✅ Express session middleware configured');
+  
+  // Add session debugging middleware
+  app.use((req, res, next) => {
+    if (req.path.startsWith('/admin')) {
+      console.log('🔍 Admin request:', {
+        path: req.path,
+        method: req.method,
+        hasSession: !!req.session,
+        sessionId: req.sessionID,
+        adminUser: req.session?.adminUser || 'not set'
+      });
+    }
+    next();
+  });
 
   // 🛡️ Security Headers Middleware
   app.use((req, res, next) => {
@@ -64,7 +84,6 @@ async function bootstrap() {
     });
 
     // Log session configuration for debugging
-    const sessionConfig = getImprovedSessionConfig();
     console.log('🔧 Session configuration:', {
       hasStore: !!sessionConfig.store,
       cookieSecure: sessionConfig.cookie?.secure,
@@ -73,6 +92,7 @@ async function bootstrap() {
     });
 
     // Build authentication router using @adminjs/express
+    // Pass null as sessionOptions since we've already configured session middleware
     const adminRouter = buildAuthenticatedRouter(
       admin,
       {
@@ -81,7 +101,7 @@ async function bootstrap() {
         cookieName: 'adminjs',
       },
       null,
-      sessionConfig
+      null // Don't let AdminJS configure its own session
     );
 
     // Mount admin router
