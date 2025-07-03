@@ -20,7 +20,6 @@
   },
   "dependencies": {
     "@adminjs/express": "^6.1.0",
-    "@adminjs/nestjs": "^6.1.0",
     "@adminjs/sql": "^2.2.6",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.1",

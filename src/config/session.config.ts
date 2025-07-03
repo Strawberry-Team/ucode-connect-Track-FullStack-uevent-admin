@@ -84,7 +84,16 @@ export const getImprovedSessionConfig = (): SessionOptions => ({
   saveUninitialized: false,
   secret: process.env.COOKIE_SECRET || 'fallback-secret-for-development',
   
-  // Use MemoryStore but with better security settings
+  // Use FileStore for production for better persistence
+  store: process.env.NODE_ENV === 'production' 
+    ? new sessionFileStore({
+        path: process.env.ROOT_FOLDER ? `${process.env.ROOT_FOLDER}/sessions` : './sessions',
+        ttl: 24 * 60 * 60, // 24 hours
+        retries: 3,
+        logFn: () => {}, // No logging in production
+      })
+    : undefined, // Use MemoryStore for development
+  
   cookie: {
     secure: process.env.NODE_ENV === 'production', // HTTPS only in production
     httpOnly: true, // Prevent JavaScript access (XSS protection)

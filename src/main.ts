@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
+import { mkdirSync, existsSync } from 'fs';
 import cookieParser from 'cookie-parser';
 import AdminJS from 'adminjs';
 import { buildAuthenticatedRouter } from '@adminjs/express';
@@ -8,13 +9,26 @@ import { buildAuthenticatedRouter } from '@adminjs/express';
 import { AppModule } from './app.module.js';
 import { getAdminOptions } from './admin/options.js';
 import provider from './admin/auth-provider.js';
-import { getSimpleSessionConfig } from './config/session.config.js';
+import { getImprovedSessionConfig } from './config/session.config.js';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   // Connect cookie-parser with secret for signed cookies (required for cookie-session)
   app.use(cookieParser(process.env.COOKIE_SECRET || 'fallback-secret-for-development'));
+
+  // Create sessions directory if it doesn't exist
+  if (process.env.NODE_ENV === 'production') {
+    const sessionsPath = process.env.ROOT_FOLDER ? `${process.env.ROOT_FOLDER}/sessions` : './sessions';
+    if (!existsSync(sessionsPath)) {
+      try {
+        mkdirSync(sessionsPath, { recursive: true });
+        console.log('✅ Sessions directory created:', sessionsPath);
+      } catch (error) {
+        console.warn('⚠️ Could not create sessions directory:', error.message);
+      }
+    }
+  }
 
   // 🛡️ Security Headers Middleware
   app.use((req, res, next) => {
@@ -49,6 +63,15 @@ async function bootstrap() {
       rootPath: '/admin',
     });
 
+    // Log session configuration for debugging
+    const sessionConfig = getImprovedSessionConfig();
+    console.log('🔧 Session configuration:', {
+      hasStore: !!sessionConfig.store,
+      cookieSecure: sessionConfig.cookie?.secure,
+      cookiePath: sessionConfig.cookie?.path,
+      environment: process.env.NODE_ENV,
+    });
+
     // Build authentication router using @adminjs/express
     const adminRouter = buildAuthenticatedRouter(
       admin,
@@ -58,7 +81,7 @@ async function bootstrap() {
         cookieName: 'adminjs',
       },
       null,
-      getSimpleSessionConfig()
+      sessionConfig
     );
 
     // Mount admin router
