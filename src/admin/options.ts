@@ -29,7 +29,6 @@ export const getAdminOptions = async (): Promise<AdminJSOptions> => {
 
     return {
       componentLoader,
-      rootPath: '/admin',
       branding: {
         companyName: `[Admin] ${process.env.APP_NAME}`,
         favicon: process.env.NODE_ENV === 'production' ? process.env.ROOT_FOLDER + '/public/favicon.ico' : '/public/favicon.ico',
@@ -154,7 +153,6 @@ export const getAdminOptions = async (): Promise<AdminJSOptions> => {
     // Return minimal config without database
     return {
       componentLoader,
-      rootPath: '/admin',
       branding: {
         companyName: `[Admin] ${process.env.APP_NAME || 'Univent'}`,
         favicon: process.env.NODE_ENV === 'production' ? process.env.ROOT_FOLDER + '/public/favicon.ico' : '/public/favicon.ico',

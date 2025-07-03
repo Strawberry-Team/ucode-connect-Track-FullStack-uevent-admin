@@ -12,7 +12,7 @@ export const getExpressSessionConfig = (): SessionOptions => ({
   
   // Use FileStore for session storage
   store: new sessionFileStore({
-    path: './sessions',
+    path: process.env.NODE_ENV === 'production' ? process.env.ROOT_FOLDER + '/sessions' : './sessions',
     ttl: 24 * 60 * 60, // 24 hours
     retries: 5,
     logFn: process.env.NODE_ENV === 'development' ? console.log : () => {},
@@ -22,7 +22,7 @@ export const getExpressSessionConfig = (): SessionOptions => ({
     secure: process.env.NODE_ENV === 'production',
     httpOnly: true,
     sameSite: 'lax',
-    path: '/',
+    path: process.env.NODE_ENV === 'production' ? process.env.ROOT_FOLDER + '/' : '/',
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
     signed: false,
   },
@@ -42,7 +42,7 @@ export const getSimpleSessionConfig = (): SessionOptions => ({
     secure: false,
     httpOnly: false,
     sameSite: false,
-    path: '/',
+    path: process.env.NODE_ENV === 'production' ? process.env.ROOT_FOLDER + '/' : '/',
     maxAge: 24 * 60 * 60 * 1000,
     signed: false,
   },
@@ -59,7 +59,7 @@ export const getSecureSessionConfig = (): SessionOptions => ({
   
   // Use FileStore for persistent session storage
   store: new sessionFileStore({
-    path: './sessions',
+    path: process.env.NODE_ENV === 'production' ? process.env.ROOT_FOLDER + '/sessions' : './sessions',
     ttl: 24 * 60 * 60, // 24 hours
     retries: 3,
     logFn: () => {}, // No logging in production
@@ -69,7 +69,7 @@ export const getSecureSessionConfig = (): SessionOptions => ({
     secure: process.env.NODE_ENV === 'production', // HTTPS only in production
     httpOnly: true, // Prevent XSS attacks
     sameSite: 'strict', // Strong CSRF protection
-    path: '/',
+    path: process.env.NODE_ENV === 'production' ? process.env.ROOT_FOLDER + '/' : '/',
     maxAge: 8 * 60 * 60 * 1000, // 8 hours (shorter session)
     signed: true, // Sign cookies for additional security
   },
@@ -89,7 +89,7 @@ export const getImprovedSessionConfig = (): SessionOptions => ({
     secure: process.env.NODE_ENV === 'production', // HTTPS only in production
     httpOnly: true, // Prevent JavaScript access (XSS protection)
     sameSite: 'lax', // Good balance between security and usability
-    path: '/',
+    path: process.env.NODE_ENV === 'production' ? process.env.ROOT_FOLDER + '/' : '/',
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
     signed: false, // Keep signed false for now
   },

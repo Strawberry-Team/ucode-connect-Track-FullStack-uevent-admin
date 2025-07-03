@@ -22,7 +22,10 @@ import {
       useFactory: async () => {
         const options = await getAdminOptions();
         return {
-          adminJsOptions: options,
+          adminJsOptions: {
+            ...options,
+            rootPath: '/admin',
+          },
           auth: {
             provider,
             cookiePassword: process.env.COOKIE_SECRET || 'fallback-secret-for-development',

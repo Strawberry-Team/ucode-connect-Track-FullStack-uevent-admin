@@ -2,8 +2,13 @@ import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import cookieParser from 'cookie-parser';
+import AdminJS from 'adminjs';
+import { buildAuthenticatedRouter } from '@adminjs/express';
 
 import { AppModule } from './app.module.js';
+import { getAdminOptions } from './admin/options.js';
+import provider from './admin/auth-provider.js';
+import { getSimpleSessionConfig } from './config/session.config.js';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -33,8 +38,35 @@ async function bootstrap() {
 
   // Serve static files from public directory
   app.useStaticAssets(join(process.cwd(), 'public'), {
-    prefix: '/public/',
+    prefix: process.env.NODE_ENV === 'production' ? process.env.ROOT_FOLDER + '/public/' : '/public/',
   });
+
+  // 🔧 Manual AdminJS Setup
+  try {
+    const adminOptions = await getAdminOptions();
+    const admin = new AdminJS({
+      ...adminOptions,
+      rootPath: '/admin',
+    });
+
+    // Build authentication router using @adminjs/express
+    const adminRouter = buildAuthenticatedRouter(
+      admin,
+      {
+        provider,
+        cookiePassword: process.env.COOKIE_SECRET || 'fallback-secret-for-development',
+        cookieName: 'adminjs',
+      },
+      null,
+      getSimpleSessionConfig()
+    );
+
+    // Mount admin router
+    app.use('/admin', adminRouter);
+    console.log('✅ AdminJS manually mounted on /admin');
+  } catch (error) {
+    console.error('❌ Failed to setup AdminJS:', error.message);
+  }
 
   // 🔒 SECURE CORS Configuration
   const allowedOrigins = process.env.NODE_ENV === 'production'
