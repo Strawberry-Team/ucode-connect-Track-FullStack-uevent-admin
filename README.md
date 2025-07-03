@@ -97,7 +97,11 @@ The Univent Admin Panel is a secure, web-based administrative interface built wi
 
 The admin panel connects directly to the MySQL database, offering CRUD operations through an intuitive AdminJS interface. Key features include admin-only authentication with email verification, secure session management using file-based storage, and comprehensive security headers for protection against common web vulnerabilities.
 
-
+![Login](https://github.com/user-attachments/assets/75992974-2291-4e31-8a6f-f664e3ba486f)
+![Home Page](https://github.com/user-attachments/assets/15657ce7-cf87-4c37-ae2f-a6e84b61a6dc)
+![Event Themes List](https://github.com/user-attachments/assets/57ca606f-0be4-49ca-a0f3-ad59bd07ca99)
+![Show Theme Details](https://github.com/user-attachments/assets/d95d648b-5767-410b-b667-948aad1940c5)
+![Edit Theme Details](https://github.com/user-attachments/assets/437426fb-4fae-439d-ab2e-31431a236880)
 
 
 
