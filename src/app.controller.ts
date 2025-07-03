@@ -15,9 +15,10 @@ export class AppController {
 
   @Get('favicon.ico')
   getFavicon(@Res() res: Response) {
-    const faviconPath = process.env.NODE_ENV === 'production' 
-      ? '/public/favicon.ico'
-      : join(process.cwd(), 'public', 'favicon.ico');
+    const faviconPath =
+      process.env.NODE_ENV === 'production'
+        ? process.env.ROOT_FOLDER + '/public/favicon.ico'
+        : join(process.cwd(), 'public', 'favicon.ico');
     res.sendFile(faviconPath);
   }
 }

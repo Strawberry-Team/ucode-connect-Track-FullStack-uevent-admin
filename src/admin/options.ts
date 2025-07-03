@@ -32,8 +32,8 @@ export const getAdminOptions = async (): Promise<AdminJSOptions> => {
       rootPath: '/admin',
       branding: {
         companyName: `[Admin] ${process.env.APP_NAME}`,
-        favicon: '/public/favicon.ico',
-        logo: '/public/logo_flat.png',
+        favicon: process.env.NODE_ENV === 'production' ? process.env.ROOT_FOLDER + '/public/favicon.ico' : '/public/favicon.ico',
+        logo: process.env.NODE_ENV === 'production' ? process.env.ROOT_FOLDER + '/public/logo_flat.png' : '/public/logo_flat.png',
         withMadeWithLove: false,
       },
       resources: [
@@ -157,8 +157,8 @@ export const getAdminOptions = async (): Promise<AdminJSOptions> => {
       rootPath: '/admin',
       branding: {
         companyName: `[Admin] ${process.env.APP_NAME || 'Univent'}`,
-        favicon: '/public/favicon.ico',
-        logo: '/public/logo_flat.png',
+        favicon: process.env.NODE_ENV === 'production' ? process.env.ROOT_FOLDER + '/public/favicon.ico' : '/public/favicon.ico',
+        logo: process.env.NODE_ENV === 'production' ? process.env.ROOT_FOLDER + '/public/logo_flat.png' : '/public/logo_flat.png',
         withMadeWithLove: false,
       },
       resources: [],
